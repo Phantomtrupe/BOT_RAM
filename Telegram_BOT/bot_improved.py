@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 import requests
+import asyncio
 import os
 from typing import Optional, Dict
 import logging
@@ -183,16 +184,25 @@ def main():
     if not TOKEN:
         print("❌ Error: BOT_TOKEN not found!")
         return
-        
+
     app = Application.builder().token(TOKEN).build()
-    
+
     # Add handlers
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("calc", calc))
     app.add_handler(CommandHandler("rates", rates))
     app.add_handler(CommandHandler("help", help_command))
-    
+
+    # Логируем версию PTB (опционально, поможет в отладке)
+    logging.info("python-telegram-bot version: %s", telegram.__version__)
+
     print("🚀 Bot starting...")
+
+    # --- Явная инициализация (workaround) ---
+    # Инициализируем приложение (выполнит getMe и прочие подготовительные шаги)
+    asyncio.run(app.initialize())
+
+    # Теперь запускаем polling как обычно
     app.run_polling()
 
 if __name__ == "__main__":
