@@ -184,6 +184,13 @@ def main():
     """Start the bot."""
     if not TOKEN:
         print("❌ Error: BOT_TOKEN not found!")
+        print("\n📋 To fix this issue, you can:")
+        print("1. Set environment variable: export BOT_TOKEN='your_bot_token_here'")
+        print("2. Create a .env file in the same directory with: BOT_TOKEN=your_bot_token_here")
+        print("\n🤖 To get a bot token:")
+        print("1. Message @BotFather on Telegram")
+        print("2. Send /newbot and follow the instructions")
+        print("3. Copy the token and use one of the methods above")
         return
 
     app = Application.builder().token(TOKEN).build()
@@ -199,12 +206,13 @@ def main():
 
     print("🚀 Bot starting...")
 
-    # --- Явная инициализация (workaround) ---
-    # Инициализируем приложение (выполнит getMe и прочие подготовительные шаги)
-    asyncio.run(app.initialize())
-
-    # Теперь запускаем polling как обычно
-    app.run_polling()
+    try:
+        # Запускаем polling (это автоматически инициализирует приложение)
+        app.run_polling()
+    except Exception as e:
+        logging.error(f"Failed to start bot: {e}")
+        print(f"❌ Failed to start bot: {e}")
+        print("🔍 Please check your BOT_TOKEN is valid and try again.")
 
 if __name__ == "__main__":
     main()
