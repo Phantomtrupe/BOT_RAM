@@ -28,9 +28,7 @@ def get_bot_token():
     except FileNotFoundError:
         pass
     
-    # Fallback to hardcoded token (not recommended for production)
-    print("⚠️ Warning: Using hardcoded token. Please set BOT_TOKEN environment variable or create .env file for better security!")
-    return "7961938964:AAHGGc0uGTMde2DpQ6tDKeI031UXpY6HG0s"
+
 
 TOKEN = get_bot_token()
 
